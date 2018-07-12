@@ -11,5 +11,5 @@ fabric-ca-server:
    environment:
      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
    volumes:
-     - "./fabric-ca-server:/etc/hyperledger/fabric-ca-server"
+     - "/root/workspaces/fabric-ca-server:/etc/hyperledger/fabric-ca-server"
    command: sh -c 'fabric-ca-server start -b admin:caserver'
