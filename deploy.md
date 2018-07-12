@@ -68,4 +68,30 @@ curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compos
 chmod +x /usr/local/bin/docker-compose
 ```
 
-##
+## 拉取docker镜像
+
+下载配置文件
+
+```
+git clone https://github.com/Hadigan/fangtu.git
+```
+
+获取fabric二进制文件以及docker镜像
+
+```
+./fangtu/pull-images.sh 
+```
+
+可以看见在当前文件夹下多了一个bin文件夹
+把bin文件夹内容移到$GOPATH/bin/下，这样子就不用在修改环境变量了
+如果$GOPATH/bin文件夹不存在就手动创建
+
+```
+mv ./bin/* /root/go/bin/
+```
+
+
+
+
+
+
