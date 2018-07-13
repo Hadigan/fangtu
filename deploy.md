@@ -91,15 +91,80 @@ mv ./bin/* /root/go/bin/
 ```
 
 ## ca-server配置
+这一节的操作都在ca服务器上完成
 
-caserver的管理员账户密码在fangtu/config/docker-compose-caserver.yaml中指定了，请在第一次启动caserver的容器之前进行修改。否则只能通过ca-client进行修改。默认的caserver的管理员账户为==admin== ，密码为 ==caserver==。
+### 启动ca服务
 
-启动ca-server容器,在/root/workspaces/下执行操作
+将我们需要的配置文件拷出来
 
 ```
-docker-compose -f ./fangtu/config/docker-compose-caserver.yaml up -d
+root@fabric-60-21:~/workspaces# cp -r ./fangtu/ca-server ./
 ```
 
+caserver的管理员账户密码在./ca-server/docker-compose-caserver.yaml中指定了，请在第一次启动caserver的容器之前进行修改。否则只能通过ca-client进行修改。默认的caserver的管理员账户为==admin== ，密码为 ==caserver==。
+
+启动ca-server容器,在```/root/workspaces/ca-server/```下执行操作
+
+```
+root@fabric-60-21:~/workspaces/ca-server# docker-compose -f docker-compose-caserver.yaml up -d
+```
+
+如果报错，请删除之前启动的名为fabric-ca-server的容器
+
+启动成功之后 ```/root/workspaces/ca-server/fabric-ca-server/```下就是caserver的配置文件以及数据库以及msp。
+
+利用我们ca服务默认管理员账户admin和密码caserver生成admin账户的凭证
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client enroll -u http://admin:caserver@127.0.0.1:7054 -H ./fabric-ca-server/admin
+```
+### 删除默认的组织结构
+下面的命令中的-H参数代表我们连接ca服务所使用的用户
+
+可以看到初始时联盟组织结构如下：
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin affiliation list
+affiliation: .
+   affiliation: org2
+      affiliation: org2.department1
+   affiliation: org1
+      affiliation: org1.department1
+      affiliation: org1.department2
+```
+
+我们现在要删除这些组织结构，然后创建我们自己的组织
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation remove --force  org1
+```
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation remove --force  org2
+```
+### 创建自己的组织
+创建自己的组织
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com
+```
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com.mederahealth
+```
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com.mederahealth.yiyuan
+```
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com.mederahealth.shaoyifu
+```
+现在的组织结构如下
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin affiliation list
+affiliation: com
+   affiliation: com.mederahealth
+      affiliation: com.mederahealth.shaoyifu
+      affiliation: com.mederahealth.yiyuan
+```
 
 
 
