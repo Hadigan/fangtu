@@ -166,6 +166,12 @@ affiliation: com
       affiliation: com.mederahealth.yiyuan
 ```
 
+## orderer.mederahealth.com配置
+
+以下操作均在orderer服务器上执行
+
+
+
 
 
 
