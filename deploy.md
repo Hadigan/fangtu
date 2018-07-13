@@ -90,6 +90,17 @@ git clone https://github.com/Hadigan/fangtu.git
 mv ./bin/* /root/go/bin/
 ```
 
+## ca-server配置
+
+caserver的管理员账户密码在fangtu/config/docker-compose-caserver.yaml中指定了，请在第一次启动caserver的容器之前进行修改。否则只能通过ca-client进行修改。默认的caserver的管理员账户为==admin== ，密码为 ==caserver==。
+
+启动ca-server容器,在/root/workspaces/下执行操作
+
+```
+docker-compose -f ./fangtu/config/docker-compose-caserver.yaml up -d
+```
+
+
 
 
 

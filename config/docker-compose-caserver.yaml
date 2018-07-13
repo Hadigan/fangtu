@@ -12,4 +12,4 @@ fabric-ca-server:
      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
    volumes:
      - "/root/workspaces/fabric-ca-server:/etc/hyperledger/fabric-ca-server"
-   command: sh -c 'fabric-ca-server start -b admin:caserver'
+   command: sh -c 'fabric-ca-server start -b admin:caserver --cfg.affiliations.allowremove  --cfg.identities.allowremove'
