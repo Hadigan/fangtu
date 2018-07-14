@@ -17,6 +17,8 @@ services:
     networks:
       - fangtu
     extra_hosts:
-      - "orderer.mederahealth.com:10.214.50.115"
-      - "peer0.org1.mederahealth.com:10.214.50.115"
-      - "peer1.org1.mederahealth.com:10.214.50.68"
+      - "orderer.mederahealth.com:172.19.60.23"
+      - "peer0.yiyuan.mederahealth.com:172.19.60.22"
+      - "peer1.yiyuan.mederahealth.com:172.19.60.22"
+      - "peer0.shaoyifu.mederahealth.com:172.19.60.20"
+      - "peer1.shaoyifu.mederahealth.com:172.19.60.20"
