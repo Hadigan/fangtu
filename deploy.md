@@ -116,7 +116,7 @@ root@fabric-60-21:~/workspaces/ca-server# docker-compose -f docker-compose-caser
 利用我们ca服务默认管理员账户admin和密码caserver生成admin账户的凭证
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client enroll -u http://admin:caserver@127.0.0.1:7054 -H ./fabric-ca-server/admin
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client enroll -u http://admin:caserver@127.0.0.1:7054 -H ./fabric-ca-files/admin
 ```
 ### 删除默认的组织结构
 下面的命令中的-H参数代表我们连接ca服务所使用的用户
@@ -124,7 +124,7 @@ root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client enroll -u http://admi
 可以看到初始时联盟组织结构如下：
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin affiliation list
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin affiliation list
 affiliation: .
    affiliation: org2
       affiliation: org2.department1
@@ -136,44 +136,114 @@ affiliation: .
 我们现在要删除这些组织结构，然后创建我们自己的组织
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation remove --force  org1
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin  affiliation remove --force  org1
 ```
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation remove --force  org2
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin  affiliation remove --force  org2
 ```
 ### 创建自己的组织
 创建自己的组织
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin  affiliation add  com
 ```
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com.mederahealth
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin  affiliation add  com.mederahealth
 ```
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com.mederahealth.yiyuan
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin  affiliation add  com.mederahealth.yiyuan
 ```
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin  affiliation add  com.mederahealth.shaoyifu
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin  affiliation add  com.mederahealth.shaoyifu
 ```
 现在的组织结构如下
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-server/admin affiliation list
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin affiliation list
 affiliation: com
    affiliation: com.mederahealth
       affiliation: com.mederahealth.shaoyifu
       affiliation: com.mederahealth.yiyuan
 ```
+### 注册节点和用户
+
+注册mederahealth.com的管理员 admin@mederahealth.com 
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@mederahealth.com --id.type client --id.affiliation "com.mederahealth" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user", hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@mederahealth.com 
+
+```
+
+注册yiyuan.mederahealth.com的管理员 admin@yiyuan.mederahealth.com
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@yiyuan.mederahealth.com --id.type client --id.affiliation "com.mederahealth.yiyuan" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user", hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@yiyuan.mederahealth.com 
+```
+
+注册shaoyifu.mederahealth.com的管理员 admin@shaoyifu.mederahealth.com
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@shaoyifu.mederahealth.com --id.type client --id.affiliation "com.mederahealth.shaoyifu" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user", hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@shaoyifu.mederahealth.com 
+```
+
+
 
 ## orderer.mederahealth.com配置
 
 以下操作均在orderer服务器上执行
 
+获取mederahealth.com组织的msp
 
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# fabric-ca-client getcacert -u http://172.19.60.21:7054 -M $(pwd)/crypto-config/mederahealth.com/msp
+```
+执行后会将mederahealth的msp获取到crypto-config目录下
 
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# tree crypto-config/
+crypto-config/
+└── mederahealth.com
+    └── msp
+        ├── cacerts
+        │   └── 172-19-60-21-7054.pem
+        ├── intermediatecerts
+        │   └── 172-19-60-21-7054.pem
+        ├── keystore
+        └── signcerts
+```
 
+使用admin@mederahealth.com的账号密码获取凭证
 
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# fabric-ca-client enroll -u http://admin@mederahealth.com:admin@mederahealth.com@172.19.60.21:7054 -H $(pwd)/crypto-config/mederahealth.com/users/admin
+```
 
+这时候发现crypto-config/mederahealth.com/users/admin 多了以下文件
+
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# ls crypto-config/mederahealth.com/users/admin/
+fabric-ca-client-config.yaml  msp
+```
+
+==这一步争议 要不要复制呢==
+
+将admin@mederahealth.com用户的证书复制到```./crypto-config/mederahealth.com/msp/admincerts/```下
+
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/mederahealth.com/msp/admincerts
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# cp crypto-config/mederahealth.com/users/admin/msp/signcerts/cert.pem crypto-config/mederahealth.com/msp/admincerts/
+```
+
+将admin@mederahealth.com用户的证书复制到admin@mederahealth.com用户的msp的admincerts下
+
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/mederahealth.com/users/admin/msp/admincerts
+
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# cp crypto-config/mederahealth.com/users/admin/msp/signcerts/cert.pem crypto-config/mederahealth.com/users/admin/msp/admincerts/
+```
+
+## yiyuan.mederahealth.com配置
+
+以下操作均在yiyuan server上完成
 
 

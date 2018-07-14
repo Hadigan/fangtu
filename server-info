@@ -3,18 +3,18 @@
 
 
 Ca server
-47.100.214.99 root #9MLq1jG0^3S
+47.100.214.99 root #9MLq1jG0^3S   内网172.19.60.21
 
 orderer-server
-47.100.200.70 root #9MLq1jG0^3S
+47.100.200.70 root #9MLq1jG0^3S   内网172.19.60.23
 
 
 fangtu
-47.100.205.189 root #9MLq1jG0^3S
+47.100.205.189 root #9MLq1jG0^3S  内网172.19.60.22
 
 
 shaoyifu
-47.100.214.192 root #9MLq1jG0^3S
+47.100.214.192 root #9MLq1jG0^3S  内网172.19.60.20
 
 
 

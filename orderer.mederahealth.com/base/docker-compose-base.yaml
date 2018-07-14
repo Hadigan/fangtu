@@ -26,8 +26,8 @@ services:
     command: orderer
     volumes:
     - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ../crypto-config/orderer.mederahealth.com/msp:/var/hyperledger/orderer/msp
-    - ../crypto-config/orderers/orderer.mederahealth.com/tls/:/var/hyperledger/orderer/tls
+    - ../crypto-config/mederahealth.com/orderer.mederahealth.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/mederahealth.com/orderer.mederahealth.com/tls/:/var/hyperledger/orderer/tls
     - orderer.mederahealth.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
