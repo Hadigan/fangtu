@@ -261,7 +261,8 @@ fabric-ca-client enroll -u http://orderer.mederahealth.com:orderer.mederahealth.
 ## 3.2. 复制管理员的证书
 ==这一步争议 要不要复制 先不复制吧==
 
-将admin@mederahealth.com用户的证书复制到```./crypto-config/mederahealth.com/msp/admincerts/```下
+
+将admin@mederahealth.com用户的证书复制到```./crypto-config/mederahealth.com/msp/admincerts/```下，==如果不复制的话创建创世区块时将会报错==
 
 ```
 root@fabric-60-23:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/mederahealth.com/msp/admincerts
@@ -294,11 +295,54 @@ root@fabric-60-23:~/workspaces/orderer.mederahealth.com# cp crypto-config/medera
 root@fabric-60-23:~/workspaces/orderer.mederahealth.com# fabric-ca-client getcacert -u http://172.19.60.21:7054 -M $(pwd)/crypto-config/yiyuan.mederahealth.com/msp
 ```
 
+获取admin@yiyuan.mederahealth.com的证书
+
+```
+root@fabric-60-22:~/workspaces/orderer.mederahealth.com# fabric-ca-client enroll -u http://admin@yiyuan.mederahealth.com:admin@yiyuan.mederahealth.com@172.19.60.21:7054 -H $(pwd)/crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com
+```
+
+复制证书
+
+```
+root@fabric-60-22:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/msp/admincerts/
+
+root@fabric-60-22:~/workspaces/orderer.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/msp/admincerts/
+```
+
 获取shaoyifu.mederahealth.com的msp
 
 ```
 root@fabric-60-23:~/workspaces/orderer.mederahealth.com# fabric-ca-client getcacert -u http://172.19.60.21:7054 -M $(pwd)/crypto-config/shaoyifu.mederahealth.com/msp
 ```
+
+获取admin@shaoyifu.mederahealth.com的证书
+
+```
+root@fabric-60-22:~/workspaces/orderer.mederahealth.com# fabric-ca-client enroll -u http://admin@shaoyifu.mederahealth.com:admin@shaoyifu.mederahealth.com@172.19.60.21:7054 -H $(pwd)/crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com
+```
+
+复制证书
+
+```
+root@fabric-60-22:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
+
+root@fabric-60-22:~/workspaces/orderer.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
+```
+
+## 3.4 创建创世区块
+
+设置配置文件的路径
+
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# export FABRIC_CFG_PATH=$PWD
+```
+生成创世区块
+
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+```
+
+## 启动orderer服务
 
 
 
@@ -374,44 +418,44 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client enroll 
 ## 4.2. 复制admin的凭证
 ==这一步争议待定,暂时不复制==
 
-将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/msp/admincerts/
 ```
 
-将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/users/admin/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/users/admin/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem yiyuan.mederahealth.com/users/admin/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/
 ```
 
-将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
 ```
 
-将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
 ```
 
 将admin@yiyuan.mederahealth.com的证书复制到user1@yiyuan.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/msp/admincerts/
 ```
 
 
@@ -488,41 +532,41 @@ root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# fabric-ca-client enrol
 将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
 将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/users/admin/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
 将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
 将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
 将admin@shaoyifu.mederahealth.com的证书复制到user1@shaoyifu.mederahealth.com/msp/admincerts/
 
 ```
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p shaoyifu.mederahealth.com/users/user1@shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/users/user1@shaoyifu.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem shaoyifu.mederahealth.com/users/user1@shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/users/user1@shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
 # 6. 通道配置

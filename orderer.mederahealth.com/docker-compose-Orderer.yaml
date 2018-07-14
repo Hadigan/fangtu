@@ -9,7 +9,7 @@ networks:
     
 services:
 
-  orderer.example.com:
+  orderer.mederahealth.com:
     extends:
       file:   base/docker-compose-base.yaml
       service: orderer.mederahealth.com
