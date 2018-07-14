@@ -51,9 +51,9 @@ services:
       - CORE_PEER_ADDRESS=peer0.yiyuan.mederahealth.com:7051
       - CORE_PEER_LOCALMSPID=YiyuanMSP
       - CORE_PEER_TLS_ENABLED=false
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/ca.crt
+      # - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/ca.crt
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
@@ -61,7 +61,7 @@ services:
         - /var/run/:/host/var/run/
         - ./chaincode/:/opt/gopath/src/github.com/chaincode
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        # - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
       - peer0.yiyuan.mederahealth.com
@@ -88,9 +88,9 @@ services:
       - CORE_PEER_ADDRESS=peer1.yiyuan.mederahealth.com:7051
       - CORE_PEER_LOCALMSPID=YiyuanMSP
       - CORE_PEER_TLS_ENABLED=false
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/tls/ca.crt
+      # - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/tls/ca.crt
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
@@ -98,7 +98,7 @@ services:
         - /var/run/:/host/var/run/
         - ./chaincode/:/opt/gopath/src/github.com/chaincode
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        # - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
       - peer1.yiyuan.mederahealth.com

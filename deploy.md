@@ -277,7 +277,7 @@ root@fabric-60-23:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/
 root@fabric-60-23:~/workspaces/orderer.mederahealth.com# cp crypto-config/mederahealth.com/users/admin@mederahealth.com/msp/signcerts/cert.pem crypto-config/mederahealth.com/users/admin@mederahealth.com/msp/admincerts/
 ```
 
-将admin@mederahealth.com用户的证书复制到orderer.mederahealth.com账号的msp的admincerts下
+将admin@mederahealth.com用户的证书复制到orderer.mederahealth.com账号的msp的admincerts下 ==如果不复制的话启动orderer容器将会报错==
 
 ```
 root@fabric-60-23:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/mederahealth.com/orderers/orderer.mederahealth.com/msp/admincerts
