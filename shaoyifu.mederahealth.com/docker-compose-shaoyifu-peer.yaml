@@ -1,19 +1,19 @@
 version: '2'
 
 volumes:
-  peer0.yiyuan.mederahealth.com:
-  peer1.yiyuan.mederahealth.com:
+  peer0.shaoyifu.mederahealth.com:
+  peer1.shaoyifu.mederahealth.com:
 
 networks: 
   fangtu:
 
 services:
 
-  peer0.yiyuan.mederahealth.com:
-    container_name: peer0.yiyuan.mederahealth.com
+  peer0.shaoyifu.mederahealth.com:
+    container_name: peer0.shaoyifu.mederahealth.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.yiyuan.mederahealth.com
+      service: peer0.shaoyifu.mederahealth.com
     networks:
       - fangtu
     extra_hosts:
@@ -23,11 +23,11 @@ services:
       - "peer0.shaoyifu.mederahealth.com:172.19.60.20"
       - "peer1.shaoyifu.mederahealth.com:172.19.60.20"
   
-  peer1.yiyuan.mederahealth.com:
-    container_name: peer1.yiyuan.mederahealth.com
+  peer1.shaoyifu.mederahealth.com:
+    container_name: peer1.shaoyifu.mederahealth.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer1.yiyuan.mederahealth.com
+      service: peer1.shaoyifu.mederahealth.com
     networks:
       - fangtu
     extra_hosts:
@@ -48,13 +48,13 @@ services:
       - CORE_LOGGING_LEVEL=DEBUG
      # - CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.yiyuan.mederahealth.com:7051
-      - CORE_PEER_LOCALMSPID=YiyuanMSP
+      - CORE_PEER_ADDRESS=peer0.shaoyifu.mederahealth.com:7051
+      - CORE_PEER_LOCALMSPID=ShaoyifuMSP
       - CORE_PEER_TLS_ENABLED=false
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/yiyuan.mederahealth.com/users/Admin@yiyuan.mederahealth.com/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/shaoyifu.mederahealth.com/users/Admin@shaoyifu.mederahealth.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
@@ -64,7 +64,7 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - peer0.yiyuan.mederahealth.com
+      - peer0.shaoyifu.mederahealth.com
     networks:
       - fangtu
     extra_hosts:

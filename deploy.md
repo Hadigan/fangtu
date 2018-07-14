@@ -1,4 +1,6 @@
-## 安装golang
+# 1. 基础环境准备
+
+## 1.1. 安装golang
 
 下载二进制文件包
 
@@ -28,7 +30,7 @@ export PATH=$PATH:$GOROOT/bin/:$GOPATH/bin/
 
 查看是否安装正确```go version```
 
-## 安装docker
+## 1.2. 安装docker
 
 安装包管理器支持https的包
 
@@ -54,7 +56,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 apt-get update && apt-get install docker-ce 
 ```
 
-## 安装docker-compose
+## 1.3. 安装docker-compose
 
 下载docker-compose二进制文件
 
@@ -68,7 +70,7 @@ curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compos
 chmod +x /usr/local/bin/docker-compose
 ```
 
-## 拉取docker镜像
+## 1.4. 拉取docker镜像
 
 下载配置文件
 
@@ -90,10 +92,10 @@ git clone https://github.com/Hadigan/fangtu.git
 mv ./bin/* /root/go/bin/
 ```
 
-## ca-server配置
+# 2. ca-server配置
 这一节的操作都在ca服务器上完成
 
-### 启动ca服务
+## 2.1. 启动ca服务
 
 将我们需要的配置文件拷出来
 
@@ -118,7 +120,7 @@ root@fabric-60-21:~/workspaces/ca-server# docker-compose -f docker-compose-caser
 ```
 root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client enroll -u http://admin:caserver@127.0.0.1:7054 -H ./fabric-ca-files/admin
 ```
-### 删除默认的组织结构
+## 2.2. 删除默认的组织结构
 下面的命令中的-H参数代表我们连接ca服务所使用的用户
 
 可以看到初始时联盟组织结构如下：
@@ -141,7 +143,7 @@ root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/
 ```
 root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client -H ./fabric-ca-files/admin  affiliation remove --force  org2
 ```
-### 创建自己的组织
+## 2.3. 创建自己的组织
 创建自己的组织
 
 ```
@@ -165,30 +167,30 @@ affiliation: com
       affiliation: com.mederahealth.shaoyifu
       affiliation: com.mederahealth.yiyuan
 ```
-### 注册节点和用户
+## 2.4. 注册节点和用户
 
 注册mederahealth.com的管理员 admin@mederahealth.com 
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@mederahealth.com --id.type client --id.affiliation "com.mederahealth" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user", hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@mederahealth.com 
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@mederahealth.com --id.type client --id.affiliation "com.mederahealth" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user",hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@mederahealth.com 
 
 ```
 
 注册yiyuan.mederahealth.com的管理员 admin@yiyuan.mederahealth.com
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@yiyuan.mederahealth.com --id.type client --id.affiliation "com.mederahealth.yiyuan" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user", hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@yiyuan.mederahealth.com 
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@yiyuan.mederahealth.com --id.type client --id.affiliation "com.mederahealth.yiyuan" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user",hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@yiyuan.mederahealth.com 
 ```
 
 注册shaoyifu.mederahealth.com的管理员 admin@shaoyifu.mederahealth.com
 
 ```
-root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@shaoyifu.mederahealth.com --id.type client --id.affiliation "com.mederahealth.shaoyifu" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user", hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@shaoyifu.mederahealth.com 
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H ./fabric-ca-files/admin --id.name admin@shaoyifu.mederahealth.com --id.type client --id.affiliation "com.mederahealth.shaoyifu" --id.attrs '"hf.Registrar.Roles=client,orderer,peer,user","hf.Registrar.DelegateRoles=client,orderer,peer,user",hf.Registrar.Attributes=*,hf.GenCRL=true,hf.Revoker=true,hf.AffiliationMgr=true,hf.IntermediateCA=true,role=admin:ecert' --id.secret=admin@shaoyifu.mederahealth.com 
 ```
 
 
 
-## orderer.mederahealth.com配置
+# 3. orderer.mederahealth.com配置
 
 以下操作均在orderer服务器上执行
 
@@ -225,7 +227,26 @@ root@fabric-60-23:~/workspaces/orderer.mederahealth.com# ls crypto-config/medera
 fabric-ca-client-config.yaml  msp
 ```
 
-==这一步争议 要不要复制呢==
+
+
+## 3.1. 用admin@mederahealth.com账号创建其他账号
+
+注册orderer.mederahealth.com
+
+```
+root@fabric-60-21:~/workspaces/ca-server# fabric-ca-client register -H $(pwd)/crypto-config/mederahealth.com/users/admin --id.name orderer.mederahealth.com --id.type orderer --id.affiliation "com.mederahealth" --id.attrs 'role=orderer:ecert' --id.secret=orderer.mederahealth.com 
+```
+
+获取orderer.mederahealth.com 的证书
+
+```
+fabric-ca-client enroll -u http://orderer.mederahealth.com:orderer.mederahealth.com@172.19.60.21:7054 -H $(pwd)/crypto-config/mederahealth.com/orderers/orderer.mederahealth.com/
+```
+
+
+
+## 3.2. 复制管理员的证书
+==这一步争议 要不要复制 先不复制吧==
 
 将admin@mederahealth.com用户的证书复制到```./crypto-config/mederahealth.com/msp/admincerts/```下
 
@@ -242,8 +263,130 @@ root@fabric-60-23:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/
 root@fabric-60-23:~/workspaces/orderer.mederahealth.com# cp crypto-config/mederahealth.com/users/admin/msp/signcerts/cert.pem crypto-config/mederahealth.com/users/admin/msp/admincerts/
 ```
 
-## yiyuan.mederahealth.com配置
+将admin@mederahealth.com用户的证书复制到orderer.mederahealth.com账号的msp的admincerts下
+
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# mkdir -p crypto-config/mederahealth.com/orderers/orderer.mederahealth.com/msp/admincerts
+
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# cp crypto-config/mederahealth.com/users/admin/msp/signcerts/cert.pem crypto-config/mederahealth.com/orderers/orderer.mederahealth.com/msp/admincerts/
+```
+
+
+# 4. yiyuan.mederahealth.com配置
 
 以下操作均在yiyuan server上完成
+
+拉取配置文件仓库
+
+```
+root@fabric-60-22:~/workspaces/# git clone http://github.com/Hadigan/fangtu.git
+```
+
+将yiyuan对应的配置文件烤出
+
+```
+root@fabric-60-22:~/workspaces/# cp -r fangtu/yiyuan.mederahealth.com ./
+```
+
+获取yiyuan.mederahealth.com的msp
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client getcacert -u http://172.19.60.21:7054 -M $(pwd)/crypto-config/yiyuan.mederahealth.com/msp
+```
+
+获取admin@yiyuan.mederahealth.com账号的凭证，该账户是由ca注册，密码为admin@yiyuan.mederahealth.com
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client enroll -u http://admin@yiyuan.mederahealth.com:admin@yiyuan.mederahealth.com@172.19.60.21:7054 -H $(pwd)/crypto-config/yiyuan.mederahealth.com/users/admin
+```
+
+## 4.1. 使用admin@yiyuan.mederahealth.com账号创建其他账号
+
+注册 peer0.yiyuan.mederahealth.com 
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client register -H $(pwd)/crypto-config/yiyuan.mederahealth.com/users/admin --id.name peer0.yiyuan.mederahealth.com --id.type peer --id.affiliation "com.mederahealth.yiyuan" --id.attrs 'role=peer:ecert' --id.secret=peer0.yiyuan.mederahealth.com 
+```
+
+获取peer0.yiyuan.mederahealth.com的证书
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client enroll -u http://peer0.yiyuan.mederahealth.com:peer0.yiyuan.mederahealth.com@172.19.60.21:7054 -H /root/workspaces/yiyuan.mederahealth.com/crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/
+```
+
+注册 peer1.yiyuan.mederahealth.com 
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client register -H $(pwd)/crypto-config/yiyuan.mederahealth.com/users/admin --id.name peer1.yiyuan.mederahealth.com --id.type peer --id.affiliation "com.mederahealth.yiyuan" --id.attrs 'role=peer:ecert' --id.secret=peer1.yiyuan.mederahealth.com 
+```
+
+获取peer1.yiyuan.mederahealth.com的证书
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client enroll -u http://peer1.yiyuan.mederahealth.com:peer1.yiyuan.mederahealth.com@172.19.60.21:7054 -H /root/workspaces/yiyuan.mederahealth.com/crypto-config/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/
+```
+
+注册普通用户 user1.yiyuan.mederahealth.com
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client register -H $(pwd)/crypto-config/yiyuan.mederahealth.com/users/admin --id.name user1@yiyuan.mederahealth.com --id.type client --id.affiliation "com.mederahealth.yiyuan" --id.attrs '"hf.Registrar.Roles=","hf.Registrar.DelegateRoles=",role=app:ecert' --id.secret=user1@yiyuan.mederahealth.com 
+```
+
+获取user1@yiyuan.mederahealth.com的证书
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client enroll -u http://user1@yiyuan.mederahealth.com:user1@yiyuan.mederahealth.com@172.19.60.21:7054 -H /root/workspaces/yiyuan.mederahealth.com/crypto-config/yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/
+```
+
+
+## 4.2. 复制admin的凭证
+==这一步争议待定,暂时不复制==
+
+将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/msp/admincerts/
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/msp/admincerts/
+
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin/signcerts/cert.pem yiyuan.mederahealth.com/msp/admincerts/
+```
+
+将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/users/admin/msp/admincerts/
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/users/admin/msp/admincerts/
+
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin/signcerts/cert.pem yiyuan.mederahealth.com/users/admin/msp/admincerts/
+```
+
+将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
+
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin/signcerts/cert.pem yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
+```
+
+将admin@yiyuan.mederahealth.com的证书复制到yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin/signcerts/cert.pem yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+```
+
+将admin@yiyuan.mederahealth.com的证书复制到user1@yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/msp/admincerts/
+
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin/signcerts/cert.pem yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/msp/admincerts/
+```
+
+
+
+
+
+
+
 
 
