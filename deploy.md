@@ -740,13 +740,13 @@ root@f39c5c8293e1:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chann
 首先是 peer0.yiyuan，下面操作在cli.peer0上执行
 
 ```
-root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter -v 1.0 -p github.com/chaincode/fangtu/
+root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter2 -v 1.0 -p github.com/chaincode/fangtu/
 ```
 
 peer1.yiyuan, 下面操作在cli.peer1上执行
 
 ```
-root@3d1799b91d0e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter -v 1.0 -p github.com/chaincode/fangtu/
+root@3d1799b91d0e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter3 -v 1.0 -p github.com/chaincode/fangtu/
 ```
 
 peer0.shaoyifu，下面操作在cli.peer0上执行
@@ -762,17 +762,24 @@ root@9982d4115973:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chain
 ```
 
 ==初始化合约==，下面操作在cli.peer0上执行，合约的初始化只需要做一次就行了，
-
 ```
-root@e7c24a19f38e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode instantiate -o orderer.mederahealth.com:37050 -C mychannel -n letter -v 1.0 -c '{"Args":["init"]}' -P "AND ('YiyuanMSP.peer', 'ShaoyifuMSP.peer')"
-```
-
-```
-peer chaincode invoke -o orderer.mederahealth.com:37050 -C mychannel -n letter --peerAddresses peer0.yiyuan.mederahealth.com:37051 --peerAddresses peer0.shaoyifu.mederahealth.com:37051 -c '{"Args":["update","11111111111111111111111111111111"]}'
+root@e7c24a19f38e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode instantiate -o orderer.mederahealth.com:37050 -C mychannel -n letter3 -v 1.0 -c '{"Args":["init"]}' -P "AND ('YiyuanMSP.member', 'ShaoyifuMSP.member')"
 ```
 
 ```
-peer chaincode invoke -o orderer.mederahealth.com:37050 -C mychannel -n letter -c '{"Args":["update","11111111111111111111111111111114"]}'
+peer chaincode invoke -o orderer.mederahealth.com:37050 -C mychannel -n letter --peerAddresses peer0.yiyuan.mederahealth.com:37051 --peerAddresses peer0.shaoyifu.mederahealth.com:37051 -c '{"Args":["update","11111111111111111111111111111115"]}'
 ```
 
-peer chaincode query -C mychannel -n letter -c '{"Args":["query", "11111111111111111111111111111114"]}'
+```
+peer chaincode invoke -o orderer.mederahealth.com:37050 -C mychannel -n letter3 -c '{"Args":["update","11111111111111111111111111111116"]}'
+```
+
+peer chaincode query -C mychannel -n letter3 -c '{"Args":["query", "11111111111111111111111111111116"]}'
+
+```
+peer chaincode upgrade -o orderer.mederahealth.com:37050 -C mychannel -P "OR ('YiyuanMSP.peer', 'ShaoyifuMSP.peer')" -n letter -v 2.0 -c '{"Args":["init"]}' 
+
+peer chaincode package ccpack.out -n letter -p github.com/chaincode/fangtu/ -v 1.1 -s -S
+
+
+```
