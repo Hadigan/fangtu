@@ -27,7 +27,7 @@ services:
       - 37051:7051
       - 37053:7053
 
-  peer1.shaoyifu.example.com:
+  peer1.shaoyifu.mederahealth.com:
     container_name: peer1.shaoyifu.mederahealth.com
     extends:
       file: peer-base.yaml

@@ -287,6 +287,8 @@ root@fabric-60-23:~/workspaces/orderer.mederahealth.com# cp crypto-config/medera
 
 ## 3.3. 获取其他组织的msp
 
+==这里有错误，以后再修改，用enroll获取的sig文件夹下的cert.pem文件不一样，因此需要采用复制的方法==
+
 获取其他组织的msp以创建创世区块，这里只能获取每个组织的ca证书，没有密钥等文件，因为我们只有一个根ca服务器，因此通过getcacert获取的每个组织的ca证书都是一样。
 
 获取yiyuan.mederahealth.com的msp
@@ -430,12 +432,12 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/y
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/msp/admincerts/
 ```
 
-将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/ ==必须复制，否则client使用admin权限将出错==
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/users/adminyiyuan.mederahealth.com/msp/admincerts/
 ```
 
 将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/ ==不复制的话无法启动peer节点==
@@ -545,7 +547,7 @@ root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config
 root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
-将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/users/admin/msp/admincerts/
+将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/admincerts/ ==不复制的话无法peer将无法使用admin的权限==
 
 ```
 root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/admincerts/
@@ -598,20 +600,134 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# export CHANNEL_NAME=mych
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
 ```
 
-定义通道的anchorpeer
+## 定义通道的anchorpeer
+
+生成mychannel通道中yiyuan组织的anchor peer更新，该操作在yiyuan server上执行
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/YiyuanMSPanchors.tx -channelID $CHANNEL_NAME -asOrg YiyuanMSP
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/YiyuanMSPanchors.tx -channelID mychannel -asOrg YiyuanMSP
 ```
 
+生成mychannel通道中shaoyifu组织的anchor peer更新，该操作在shaoyifu server上执行
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/ShaoyifuMSPanchors.tx -channelID $CHANNEL_NAME -asOrg ShaoyifuMSP
+root@fabric-60-20:~/workspaces/shaoyifu.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/ShaoyifuMSPanchors.tx -channelID mychannel -asOrg ShaoyifuMSP
 ```
 
 # 7. 启动peer
 
+启动yiyuan的peer
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# docker-compose -f docker-compose-yiyuan-peer.yaml up -d
+```
+
+启动shaoyifu的peer
+
+```
+root@fabric-60-20:~/workspaces/shaoyifu.mederahealth.com# docker-compose -f docker-compose-shaoyifu-peer.yaml up -d
+```
 
 
+# 8. 创建通道并加入
+
+## 对peer0.yiyuan.mederahealth.com进行操作
+
+进入yiyuan的peer0的cli
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# docker exec -it cli.peer0 bash
+```
+在cli.peer0中以admin@yiyuan.mederahealth.com的名义创建名为 mychannel的通道
+
+```
+root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel create -o orderer.mederahealth.com:37050 -c mychannel -f ./channel-artifacts/channel.tx
+```
+
+创建成功后当前目录下将多出一个mychannel.block的文件
+
+```
+root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# ls
+channel-artifacts  crypto  mychannel.block
+```
+
+让peer0加入mychannel
+
+```
+root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel join -b mychannel.block
+```
+
+## 对peer1.yiyuan.mederahealth.com进行操作
+
+进入peer1的cli容器
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# docker exec -it cli.peer1 bash
+```
+获取mychannel的第一个block
+
+```
+root@3d1799b91d0e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel fetch oldest -c mychannel -o orderer.mederahealth.com:37050
+```
+此时当前目录下将会多出mychannel_oldest.block，这个block内容与上面peer0生成的mychannel.block是一样的，可以使用md5sum验证一下。
+
+接下来让peer0加入mychannel
+```
+root@3d1799b91d0e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel join -b mychannel_oldest.block
+```
+## 对peer0.shaoyifu.mederahealth.com进行操作
+
+进入peer0的cli容器
+
+```
+root@fabric-60-20:~/workspaces/shaoyifu.mederahealth.com# docker exec -it cli.peer0 bash
+```
+获取mychannel的第一个block
+
+```
+root@f39c5c8293e1:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel fetch oldest -c mychannel -o orderer.mederahealth.com:37050
+```
+此时当前目录下将会多出mychannel_oldest.block，这个block内容与上面生成的mychannel.block是一样的，可以使用md5sum验证一下。
+
+接下来让peer0加入mychannel
+
+```
+root@f39c5c8293e1:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel join -b mychannel_oldest.block
+```
+## 对peer1.shaoyifu.mederahealth.com进行操作
+
+进入peer1的cli容器
+
+```
+root@fabric-60-20:~/workspaces/shaoyifu.mederahealth.com# docker exec -it cli.peer1 bash
+```
+获取mychannel的第一个block
+
+```
+root@9982d4115973:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel fetch oldest -c mychannel -o orderer.mederahealth.com:37050
+```
+此时当前目录下将会多出mychannel_oldest.block，这个block内容与上面生成的mychannel.block是一样的，可以使用md5sum验证一下。
+
+接下来让peer0加入mychannel
+
+```
+root@9982d4115973:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel join -b mychannel_oldest.block
+```
+
+# 更新mychannel的anchor peer
+
+更新mychannel中yiyuan组织的anchor peer，我们只要有admin权限即可，以下操作在yiyuan的服务器的cli.peer0中进行
+
+```
+root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel update -o orderer.mederahealth.com:37050 -c mychannel -f ./channel-artifacts/YiyuanMSPanchors.tx
+```
+
+更新mychannel中shaoyifu组织的anchor peer，我们只要有admin权限即可，以下操作在shaoyifu服务器的cli.peer0中进行
+
+```
+root@f39c5c8293e1:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel update -o orderer.mederahealth.com:37050 -c mychannel -f ./channel-artifacts/ShaoyifuMSPanchors.tx
+```
+
+# 
 
 
 
