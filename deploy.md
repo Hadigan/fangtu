@@ -595,7 +595,7 @@ admincerts  cacerts  intermediatecerts  keystore  signcerts
 在yiyuan.mederahealth.com服务器中创建通道配置交易
 
 ```
-root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# export CHANNEL_NAME=mychannel
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# export CHANNEL_NAME=mychannel export FABRIC_CFG_PATH=$PWD
 
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
 ```
@@ -605,11 +605,14 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile Two
 生成mychannel通道中yiyuan组织的anchor peer更新，该操作在yiyuan server上执行
 
 ```
+export FABRIC_CFG_PATH=$PWD
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/YiyuanMSPanchors.tx -channelID mychannel -asOrg YiyuanMSP
 ```
 
 生成mychannel通道中shaoyifu组织的anchor peer更新，该操作在shaoyifu server上执行
+
 ```
+export FABRIC_CFG_PATH=$PWD
 root@fabric-60-20:~/workspaces/shaoyifu.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/ShaoyifuMSPanchors.tx -channelID mychannel -asOrg ShaoyifuMSP
 ```
 
@@ -758,7 +761,18 @@ peer1.shaoyifu，下面操作在cli.peer1上执行
 root@9982d4115973:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter -v 1.0 -p github.com/chaincode/fangtu/
 ```
 
-初始化合约，下面操作在cli.peer0上执行，合约的初始化只需要做一次就行了，
+==初始化合约==，下面操作在cli.peer0上执行，合约的初始化只需要做一次就行了，
+
+```
+root@e7c24a19f38e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode instantiate -o orderer.mederahealth.com:37050 -C mychannel -n letter -v 1.0 -c '{"Args":["init"]}' -P "AND ('YiyuanMSP.peer', 'ShaoyifuMSP.peer')"
 ```
 
+```
+peer chaincode invoke -o orderer.mederahealth.com:37050 -C mychannel -n letter --peerAddresses peer0.yiyuan.mederahealth.com:37051 --peerAddresses peer0.shaoyifu.mederahealth.com:37051 -c '{"Args":["update","11111111111111111111111111111111"]}'
+```
 
+```
+peer chaincode invoke -o orderer.mederahealth.com:37050 -C mychannel -n letter -c '{"Args":["update","11111111111111111111111111111114"]}'
+```
+
+peer chaincode query -C mychannel -n letter -c '{"Args":["query", "11111111111111111111111111111114"]}'
