@@ -727,10 +727,38 @@ root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chann
 root@f39c5c8293e1:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer channel update -o orderer.mederahealth.com:37050 -c mychannel -f ./channel-artifacts/ShaoyifuMSPanchors.tx
 ```
 
-# 
+# 安装以及初始化 chaincode
+
+安装了chaincode的节点才可以执行背书，我们在这里让所有的四个节点都安装chaincode。
+
+我们这里将合约的名称取为 letter
 
 
+首先是 peer0.yiyuan，下面操作在cli.peer0上执行
 
+```
+root@537a30b2957e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter -v 1.0 -p github.com/chaincode/fangtu/
+```
 
+peer1.yiyuan, 下面操作在cli.peer1上执行
+
+```
+root@3d1799b91d0e:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter -v 1.0 -p github.com/chaincode/fangtu/
+```
+
+peer0.shaoyifu，下面操作在cli.peer0上执行
+
+```
+root@f39c5c8293e1:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter -v 1.0 -p github.com/chaincode/fangtu/
+```
+
+peer1.shaoyifu，下面操作在cli.peer1上执行
+
+```
+root@9982d4115973:/opt/gopath/src/github.com/hyperledger/fabric/peer# peer chaincode install -n letter -v 1.0 -p github.com/chaincode/fangtu/
+```
+
+初始化合约，下面操作在cli.peer0上执行，合约的初始化只需要做一次就行了，
+```
 
 
