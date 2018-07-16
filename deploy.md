@@ -342,7 +342,11 @@ root@fabric-60-23:~/workspaces/orderer.mederahealth.com# export FABRIC_CFG_PATH=
 root@fabric-60-23:~/workspaces/orderer.mederahealth.com# configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
 ```
 
-## 启动orderer服务
+## 3.5 启动orderer服务
+
+```
+root@fabric-60-23:~/workspaces/orderer.mederahealth.com# docker-compose -f ./docker-compose-Orderer.yaml up -d
+```
 
 
 
@@ -418,7 +422,7 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# fabric-ca-client enroll 
 ## 4.2. 复制admin的凭证
 ==这一步争议待定,暂时不复制==
 
-将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/msp/admincerts/ ==不复制的话无法生成channel.tx==
 
 ```
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/msp/admincerts/
@@ -434,7 +438,7 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/y
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/users/admin/msp/admincerts/
 ```
 
-将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/ ==不复制的话无法启动peer节点==
 
 ```
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
@@ -442,7 +446,7 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/y
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp crypto-config/yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/peers/peer0.yiyuan.mederahealth.com/msp/admincerts/
 ```
 
-将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
+将admin@yiyuan.mederahealth.com的证书复制到crypto-config/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/ ==不复制的话无法启动peer节点==
 
 ```
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/yiyuan.mederahealth.com/peers/peer1.yiyuan.mederahealth.com/msp/admincerts/
@@ -457,6 +461,10 @@ root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# mkdir -p crypto-config/y
 
 root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# cp yiyuan.mederahealth.com/users/admin@yiyuan.mederahealth.com/msp/signcerts/cert.pem crypto-config/yiyuan.mederahealth.com/users/user1@yiyuan.mederahealth.com/msp/admincerts/
 ```
+
+
+
+
 
 
 # 5. shaoyifu.mederahealth.com配置
@@ -529,12 +537,12 @@ root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# fabric-ca-client enrol
 ## 5.2. 复制admin的凭证
 ==这一步争议待定,暂时不复制==
 
-将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/msp/admincerts/
+将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/msp/admincerts/ ==必须复制，提供给其他组织的msp必须包含admincerts文件夹==
 
 ```
 root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
 
-root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
+root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
 将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/users/admin/msp/admincerts/
@@ -545,7 +553,7 @@ root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config
 root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
-将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
+将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/ ==不复制的话无法启动peer节点==
 
 ```
 root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
@@ -553,7 +561,7 @@ root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config
 root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp crypto-config/shaoyifu.mederahealth.com/users/admin@shaoyifu.mederahealth.com/msp/signcerts/cert.pem crypto-config/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/msp/admincerts/
 ```
 
-将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/
+将admin@shaoyifu.mederahealth.com的证书复制到shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/ ==不复制的话无法启动peer节点==
 
 ```
 root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# mkdir -p crypto-config/shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/msp/admincerts/
@@ -570,6 +578,38 @@ root@fabric-60-22:~/workspaces/shaoyifu.mederahealth.com# cp shaoyifu.mederaheal
 ```
 
 # 6. 通道配置
+
+获得shaoyifu.mederahealth.com 的 完整msp，需要msp文件夹下有admincerts目录，且其中存放了admin@shaoyifu.mederahealth.com 的signcert.值只能让shaoyifu这个组织发给yiyuan组织。这个msp中没有私钥的信息，因此是可以提供给其他的组织的。
+
+我们通过scp来发送，实际场景中应该通过其他的途径（因为shaoyifu不可能知道yiyuan的服务器的账户密码）。
+
+发完之后，yiyuan的crypto-config/shaoyifu.mederahealth.com/msp下就有admincerts文件夹
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com/crypto-config/shaoyifu.mederahealth.com/msp# ls
+admincerts  cacerts  intermediatecerts  keystore  signcerts
+```
+
+在yiyuan.mederahealth.com服务器中创建通道配置交易
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# export CHANNEL_NAME=mychannel
+
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+```
+
+定义通道的anchorpeer
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/YiyuanMSPanchors.tx -channelID $CHANNEL_NAME -asOrg YiyuanMSP
+```
+
+```
+root@fabric-60-22:~/workspaces/yiyuan.mederahealth.com# configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/ShaoyifuMSPanchors.tx -channelID $CHANNEL_NAME -asOrg ShaoyifuMSP
+```
+
+# 7. 启动peer
+
 
 
 

@@ -30,7 +30,7 @@ services:
     # - ../crypto-config/mederahealth.com/orderers/orderer.mederahealth.com/tls/:/var/hyperledger/orderer/tls
     - orderer.mederahealth.com:/var/hyperledger/production/orderer
     ports:
-      - 7050:7050
+      - 37050:7050
 
 
 

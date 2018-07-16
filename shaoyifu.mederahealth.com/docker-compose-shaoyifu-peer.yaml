@@ -20,8 +20,6 @@ services:
       - "orderer.mederahealth.com:172.19.60.23"
       - "peer0.yiyuan.mederahealth.com:172.19.60.22"
       - "peer1.yiyuan.mederahealth.com:172.19.60.22"
-      - "peer0.shaoyifu.mederahealth.com:172.19.60.20"
-      - "peer1.shaoyifu.mederahealth.com:172.19.60.20"
   
   peer1.shaoyifu.mederahealth.com:
     container_name: peer1.shaoyifu.mederahealth.com
@@ -34,8 +32,6 @@ services:
       - "orderer.mederahealth.com:172.19.60.23"
       - "peer0.yiyuan.mederahealth.com:172.19.60.22"
       - "peer1.yiyuan.mederahealth.com:172.19.60.22"
-      - "peer0.shaoyifu.mederahealth.com:172.19.60.20"
-      - "peer1.shaoyifu.mederahealth.com:172.19.60.20"
     
   cli.peer0:
     container_name: cli.peer0
@@ -48,7 +44,7 @@ services:
       - CORE_LOGGING_LEVEL=DEBUG
      # - CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.shaoyifu.mederahealth.com:7051
+      - CORE_PEER_ADDRESS=peer0.shaoyifu.mederahealth.com:37051
       - CORE_PEER_LOCALMSPID=ShaoyifuMSP
       - CORE_PEER_TLS_ENABLED=false
       # - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/tls/server.crt
@@ -85,7 +81,7 @@ services:
       - CORE_LOGGING_LEVEL=DEBUG
      # - CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer1.shaoyifu.mederahealth.com:7051
+      - CORE_PEER_ADDRESS=peer1.shaoyifu.mederahealth.com:38051
       - CORE_PEER_LOCALMSPID=ShaoyifuMSP
       - CORE_PEER_TLS_ENABLED=false
       # - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/shaoyifu.mederahealth.com/peers/peer1.shaoyifu.mederahealth.com/tls/server.crt

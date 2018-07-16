@@ -15,7 +15,7 @@ services:
     environment:
       - CORE_PEER_ID=peer0.shaoyifu.mederahealth.com
       - CORE_PEER_ADDRESS=peer0.shaoyifu.mederahealth.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.shaoyifu.mederahealth.com:8051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.shaoyifu.mederahealth.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.shaoyifu.mederahealth.com:7051
       - CORE_PEER_LOCALMSPID=ShaoyifuMSP
     volumes:
@@ -24,8 +24,8 @@ services:
         # - ../crypto-config/shaoyifu.mederahealth.com/peers/peer0.shaoyifu.mederahealth.com/tls:/etc/hyperledger/fabric/tls
         - peer0.shaoyifu.mederahealth.com:/var/hyperledger/production
     ports:
-      - 7051:7051
-      - 7053:7053
+      - 37051:7051
+      - 37053:7053
 
   peer1.shaoyifu.example.com:
     container_name: peer1.shaoyifu.mederahealth.com
@@ -34,8 +34,8 @@ services:
       service: peer-base
     environment:
       - CORE_PEER_ID=peer1.shaoyifu.mederahealth.com
-      - CORE_PEER_ADDRESS=peer1.shaoyifu.mederahealth.com:8051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.shaoyifu.mederahealth.com:8051
+      - CORE_PEER_ADDRESS=peer1.shaoyifu.mederahealth.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.shaoyifu.mederahealth.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.shaoyifu.mederahealth.com:7051
       - CORE_PEER_LOCALMSPID=ShaoyifuMSP
     volumes:
@@ -45,6 +45,6 @@ services:
         - peer1.shaoyifu.mederahealth.com:/var/hyperledger/production
 
     ports:
-      - 8051:7051
-      - 8053:7053
+      - 38051:7051
+      - 38053:7053
 

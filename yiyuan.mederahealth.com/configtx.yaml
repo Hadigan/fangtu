@@ -71,7 +71,7 @@ Organizations:
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
             - Host: peer0.yiyuan.mederahealth.com
-              Port: 7051
+              Port: 37051
 
     - &Shaoyifu
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -88,7 +88,7 @@ Organizations:
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
             - Host: peer0.shaoyifu.mederahealth.com
-              Port: 7051
+              Port: 37051
 
 ################################################################################
 #
@@ -105,7 +105,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer.mederahealth.com:7050
+        - orderer.mederahealth.com:37050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
