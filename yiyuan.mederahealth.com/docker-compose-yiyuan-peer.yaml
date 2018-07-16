@@ -18,6 +18,7 @@ services:
       - fangtu
     extra_hosts:
       - "orderer.mederahealth.com:172.19.60.23"
+      - "peer1.yiyuan.mederahealth.com:172.19.60.22"
       - "peer0.shaoyifu.mederahealth.com:172.19.60.20"
       - "peer1.shaoyifu.mederahealth.com:172.19.60.20"
   
@@ -30,6 +31,7 @@ services:
       - fangtu
     extra_hosts:
       - "orderer.mederahealth.com:172.19.60.23"
+      - "peer0.yiyuan.mederahealth.com:172.19.60.22"
       - "peer0.shaoyifu.mederahealth.com:172.19.60.20"
       - "peer1.shaoyifu.mederahealth.com:172.19.60.20"
     

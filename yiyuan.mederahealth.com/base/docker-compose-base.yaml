@@ -14,8 +14,8 @@ services:
       service: peer-base
     environment:
       - CORE_PEER_ID=peer0.yiyuan.mederahealth.com
-      - CORE_PEER_ADDRESS=peer0.yiyuan.mederahealth.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.yiyuan.mederahealth.com:7051
+      # - CORE_PEER_ADDRESS=peer0.yiyuan.mederahealth.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.yiyuan.mederahealth.com:38051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.yiyuan.mederahealth.com:37051
       - CORE_PEER_LOCALMSPID=YiyuanMSP
     volumes:
@@ -34,9 +34,9 @@ services:
       service: peer-base
     environment:
       - CORE_PEER_ID=peer1.yiyuan.mederahealth.com
-      - CORE_PEER_ADDRESS=peer1.yiyuan.mederahealth.com:7051
+      # - CORE_PEER_ADDRESS=peer1.yiyuan.mederahealth.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.yiyuan.mederahealth.com:38051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.yiyuan.mederahealth.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.yiyuan.mederahealth.com:37051
       - CORE_PEER_LOCALMSPID=YiyuanMSP
     volumes:
         - /var/run/:/host/var/run/
